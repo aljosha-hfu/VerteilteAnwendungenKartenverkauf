@@ -1,0 +1,8 @@
+package de.aljoshavieth.kartenverkauf.exceptions;
+
+public class TicketException extends Exception {
+    public TicketException(String message){
+        super(message);
+    }
+
+}
