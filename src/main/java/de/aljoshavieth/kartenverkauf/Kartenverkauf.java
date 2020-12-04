@@ -2,11 +2,13 @@ package de.aljoshavieth.kartenverkauf;
 
 import de.aljoshavieth.kartenverkauf.exceptions.TicketException;
 
+import java.util.Arrays;
+
 public class Kartenverkauf {
     private Ticket[] tickets = new Ticket[100];
     private boolean acceptReservations = true;
 
-    private synchronized void sellTicket(int seat) throws TicketException {
+    public synchronized void sellTicket(int seat) throws TicketException {
         if (ticketNotExists(seat)) {
             throw new TicketException("Ticket does not exist!");
         }
@@ -64,7 +66,7 @@ public class Kartenverkauf {
 
     }
 
-    public synchronized void cancelTicketReservation() {
+    public synchronized void cancelTicketReservations() {
         acceptReservations = false;
     }
 
@@ -92,6 +94,17 @@ public class Kartenverkauf {
         ticket.setState(TicketState.RESERVED);
         ticket.setName(name);
         tickets[seat] = ticket;
+    }
+
+    private void cancelAllTicketReservations(){
+        Arrays.stream(tickets).forEach(this::cancelTicketReservation);
+    }
+
+    private void cancelTicketReservation(Ticket ticket) {
+        if(ticket.getState().equals(TicketState.RESERVED)){
+            ticket.setName(null);
+            ticket.setState(TicketState.AVAILABLE);
+        }
     }
 
 }
