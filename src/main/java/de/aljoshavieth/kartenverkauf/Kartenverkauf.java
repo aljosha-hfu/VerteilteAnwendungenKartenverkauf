@@ -5,8 +5,8 @@ import de.aljoshavieth.kartenverkauf.exceptions.TicketException;
 import java.util.Arrays;
 
 public class Kartenverkauf {
-    private Ticket[] tickets = new Ticket[100];
-    private boolean acceptReservations = true;
+    protected Ticket[] tickets = new Ticket[100];
+    protected boolean acceptReservations = true;
 
     public synchronized void sellTicket(int seat) throws TicketException {
         if (ticketNotExists(seat)) {
@@ -96,7 +96,7 @@ public class Kartenverkauf {
         tickets[seat] = ticket;
     }
 
-    private void cancelAllTicketReservations(){
+    protected void cancelAllTicketReservations(){
         Arrays.stream(tickets).forEach(this::cancelTicketReservation);
     }
 
