@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="author" content="Aljosha Vieth">
+    <title>Aljoshas Ticketverkauf</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<h1>Stornierung eines Tickets</h1>
+<form action="ticketmanager" method="post">
+    <input type="hidden" name="formName" value="cancelTicket"/>
+    <label for="seat">Sitzplatznummer</label>
+    <input type="number" id="seat" name="seat" size="8" value=""><br/>
+    <input type="submit" value="ausführen">
+</form>
+</body>
+</html>

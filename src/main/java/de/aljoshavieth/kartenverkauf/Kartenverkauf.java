@@ -9,6 +9,7 @@ public class Kartenverkauf {
     protected boolean acceptReservations = true;
 
     public synchronized void sellTicket(int seat) throws TicketException {
+        System.out.println("KARTENVERKAUF............................... selling ticket.... seat: " + seat);
         if (ticketNotExists(seat)) {
             throw new TicketException("Ticket does not exist!");
         }
@@ -45,7 +46,7 @@ public class Kartenverkauf {
         if (name == null) {
             throw new TicketException("No name entered!");
         }
-        if (!ticketIsReserved(seat)){
+        if (!ticketIsReserved(seat)) {
             throw new TicketException("Ticket is not reserved!");
         }
         if (!tickets[seat].getName().equals(name)) {
@@ -96,12 +97,12 @@ public class Kartenverkauf {
         tickets[seat] = ticket;
     }
 
-    protected void cancelAllTicketReservations(){
+    protected void cancelAllTicketReservations() {
         Arrays.stream(tickets).forEach(this::cancelTicketReservation);
     }
 
     private void cancelTicketReservation(Ticket ticket) {
-        if(ticket.getState().equals(TicketState.RESERVED)){
+        if (ticket.getState().equals(TicketState.RESERVED)) {
             ticket.setName(null);
             ticket.setState(TicketState.AVAILABLE);
         }
