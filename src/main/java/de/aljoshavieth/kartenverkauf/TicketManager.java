@@ -1,7 +1,5 @@
 package de.aljoshavieth.kartenverkauf;
 
-import de.aljoshavieth.kartenverkauf.exceptions.TicketException;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -29,12 +27,10 @@ public class TicketManager extends HttpServlet {
             System.out.println("NOT A VALID NUMBER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             return;
         }
-        int seat = Integer.parseInt(seatAsString);
-
+        int seat = Integer.parseInt(seatAsString)-1;
         try {
             switch (formName) {
                 case "sellTicket":
-                    System.out.println("SELLING TICKET!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                     kartenverkauf.sellTicket(seat);
                     break;
                 case "reserveTicket":
@@ -52,8 +48,7 @@ public class TicketManager extends HttpServlet {
                 default:
                     forwardToErrorPage(request, response, "Unknown error");
             }
-            forwardToPage(request, response, "/index.jsp");
-
+            response.sendRedirect(request.getContextPath() + "/success.html");
         } catch (TicketException e){
             forwardToErrorPage(request, response, e.getMessage());
         }

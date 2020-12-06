@@ -1,15 +1,26 @@
 package de.aljoshavieth.kartenverkauf;
 
-import de.aljoshavieth.kartenverkauf.exceptions.TicketException;
-
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Kartenverkauf {
     protected Ticket[] tickets = new Ticket[100];
     protected boolean acceptReservations = true;
 
+    //TODO change
+    public Kartenverkauf(){
+        for (int i = 0; i < 100; i++) {
+            Ticket ticket = new Ticket();
+            if (i % 2 == 0) {
+                ticket.setState(TicketState.RESERVED);
+            } else {
+                ticket.setState(TicketState.AVAILABLE);
+            }
+            tickets[i] = ticket;
+        }
+    }
+
     public synchronized void sellTicket(int seat) throws TicketException {
-        System.out.println("KARTENVERKAUF............................... selling ticket.... seat: " + seat);
         if (ticketNotExists(seat)) {
             throw new TicketException("Ticket does not exist!");
         }
@@ -30,7 +41,7 @@ public class Kartenverkauf {
         if (!ticketIsFree(seat)) {
             throw new TicketException("Ticket not available!");
         }
-        if (name == null) {
+        if (name == null || name.length() == 0) {
             throw new TicketException("No name entered!");
         }
         setTicketReserved(seat, name);
@@ -106,6 +117,39 @@ public class Kartenverkauf {
             ticket.setName(null);
             ticket.setState(TicketState.AVAILABLE);
         }
+    }
+
+    public ArrayList<Integer> getAllAvailableTickets(){
+        ArrayList<Integer> availableTickets = new ArrayList<>();
+        for (int i=0; i<100; i++) {
+            Ticket ticket = tickets[i];
+            if (ticket.getState().equals(TicketState.AVAILABLE)) {
+                availableTickets.add(i);
+            }
+        }
+        return availableTickets;
+    }
+
+    public ArrayList<Integer> getAllSoldTickets(){
+        ArrayList<Integer> soldTickets = new ArrayList<>();
+        for (int i=0; i<100; i++) {
+            Ticket ticket = tickets[i];
+            if (ticket.getState().equals(TicketState.SOLD)) {
+                soldTickets.add(i);
+            }
+        }
+        return soldTickets;
+    }
+
+    public ArrayList<Integer> getAllReservedTickets(){
+        ArrayList<Integer> reservedTickets = new ArrayList<>();
+        for (int i=0; i<100; i++) {
+            Ticket ticket = tickets[i];
+            if (ticket.getState().equals(TicketState.RESERVED)) {
+                reservedTickets.add(i);
+            }
+        }
+        return reservedTickets;
     }
 
 }

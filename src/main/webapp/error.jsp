@@ -9,11 +9,17 @@
 <%
     final String errorMessage = (String) request.getAttribute ("errorMessage");
 %>
-<html>
+<!DOCTYPE html>
+<html lang="de">
 <head>
-    <title>Title</title>
+    <meta charset="UTF-8">
+    <meta name="author" content="Aljosha Vieth">
+    <title>Aljoshas Ticketverkauf</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<h1>Fehler</h1>
 <p><%= errorMessage %></p>
+<a href="index.jsp">Zurück zur Hauptseite</a>
 </body>
 </html>
