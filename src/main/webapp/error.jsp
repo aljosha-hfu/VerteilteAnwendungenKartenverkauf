@@ -1,9 +1,7 @@
 <%--
-  Created by IntelliJ IDEA.
-  User: Aljosha
+  Created by Aljosha Vieth using IntelliJ IDEA Ultimate.
   Date: 04.12.2020
   Time: 13:46
-  To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
@@ -19,7 +17,7 @@
 </head>
 <body>
 <h1>Fehler</h1>
-<p><%= errorMessage %></p>
-<a href="index.jsp">Zurück zur Hauptseite</a>
+<h3><%= errorMessage %></h3>
+<h2><a href="index.jsp">Zurück zur Hauptseite</a></h2>
 </body>
 </html>

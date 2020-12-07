@@ -1,12 +1,11 @@
-<%@ page import="de.aljoshavieth.kartenverkauf.Kartenverkauf" %>
-<%@ page import="java.util.StringJoiner" %>
-<%@ page import="java.util.ArrayList" %><%--
-  Created by IntelliJ IDEA.
-  User: Aljosha
+<%--
+  Created by Aljosha Vieth using IntelliJ IDEA Ultimate.
   Date: 04.12.2020
   Time: 14:06
-  To change this template use File | Settings | File Templates.
 --%>
+<%@ page import="java.util.StringJoiner" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="de.aljoshavieth.kartenverkauf.Kartenverkauf" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="de">
@@ -22,8 +21,7 @@
         private String getStyleString(ArrayList<Integer> list){
             StringJoiner stringJoiner = new StringJoiner(", #n");
             stringJoiner.add(" ");
-            for(int i = 0; i<list.size(); i++){
-                Integer index = list.get(i);
+            for(Integer index: list){
                 index++;
                 stringJoiner.add(index.toString());
             }
@@ -33,15 +31,21 @@
             }
             return style;
         }
+
+        private String getReservationStatusWord(Kartenverkauf kartenverkauf){
+            if(kartenverkauf.isAcceptingReservations()){
+                return "";
+            } else {
+                return "nicht ";
+            }
+        };
         %>
         <%
-        //TODO change with singleton
-        Kartenverkauf kartenverkauf = new Kartenverkauf();
+        Kartenverkauf kartenverkauf = (Kartenverkauf) request.getServletContext().getAttribute("Kartenverkauf");
         String available = getStyleString(kartenverkauf.getAllAvailableTickets());
         String reserved = getStyleString(kartenverkauf.getAllReservedTickets());
         String sold = getStyleString(kartenverkauf.getAllSoldTickets());
-        System.out.println("Index reached");
-        //TODO get all tickets and display
+        String reservationStatus = "Reservierungen werden " + getReservationStatusWord(kartenverkauf) + "angenommen.";
         %>
 
         <%= available %>
@@ -52,13 +56,13 @@
 
         <%= reserved %>
         {
-            background-color: #e74c3c
+            background-color: #9b59b6
         ;
         }
 
         <%= sold %>
         {
-            background-color: #9b59b6
+            background-color: #e74c3c
         ;
         }
 
@@ -194,9 +198,15 @@
 <br/>
 <table>
     <tr>
-        <td id="free">verfügbar</td>
-        <td id="reserved">reserviert</td>
-        <td id="sold">verkauft</td>
+        <td class="free">verfügbar</td>
+        <td class="reserved">reserviert</td>
+        <td class="sold">verkauft</td>
+    </tr>
+</table>
+<br/>
+<table>
+    <tr>
+        <td class="reserved">Reservierungsstatus: <%= reservationStatus %></td>
     </tr>
 </table>
 <br/>

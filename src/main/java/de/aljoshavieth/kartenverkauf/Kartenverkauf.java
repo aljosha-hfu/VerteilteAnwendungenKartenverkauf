@@ -7,25 +7,20 @@ public class Kartenverkauf {
     protected Ticket[] tickets = new Ticket[100];
     protected boolean acceptReservations = true;
 
-    //TODO change
-    public Kartenverkauf(){
+    public Kartenverkauf() {
         for (int i = 0; i < 100; i++) {
             Ticket ticket = new Ticket();
-            if (i % 2 == 0) {
-                ticket.setState(TicketState.RESERVED);
-            } else {
-                ticket.setState(TicketState.AVAILABLE);
-            }
+            ticket.setState(TicketState.AVAILABLE);
             tickets[i] = ticket;
         }
     }
 
     public synchronized void sellTicket(int seat) throws TicketException {
         if (ticketNotExists(seat)) {
-            throw new TicketException("Ticket does not exist!");
+            throw new TicketException("Ticket existiert nicht!");
         }
         if (!ticketIsFree(seat)) {
-            throw new TicketException("Ticket not available!");
+            throw new TicketException("Ticket nicht verfügbar!");
         }
         setStateOfTicket(seat, TicketState.SOLD);
 
@@ -33,35 +28,35 @@ public class Kartenverkauf {
 
     public synchronized void reserveTicket(int seat, String name) throws TicketException {
         if (!acceptReservations) {
-            throw new TicketException("Reservations are not available at this time!");
+            throw new TicketException("Reservierungen sind nicht verfügbar!");
         }
         if (ticketNotExists(seat)) {
-            throw new TicketException("Ticket does not exist!");
+            throw new TicketException("Ticket existiert nicht!");
         }
         if (!ticketIsFree(seat)) {
-            throw new TicketException("Ticket not available!");
+            throw new TicketException("Ticket nicht verfügbar!");
         }
         if (name == null || name.length() == 0) {
-            throw new TicketException("No name entered!");
+            throw new TicketException("Kein Name angegeben!");
         }
         setTicketReserved(seat, name);
     }
 
     public synchronized void sellReservedTicket(int seat, String name) throws TicketException {
         if (ticketNotExists(seat)) {
-            throw new TicketException("Ticket does not exist!");
+            throw new TicketException("Ticket existiert nicht!");
         }
-        if (!ticketIsFree(seat)) {
-            throw new TicketException("Ticket not available!");
+        if (ticketIsFree(seat)) {
+            throw new TicketException("Ticket nicht verfügbar!");
         }
         if (name == null) {
-            throw new TicketException("No name entered!");
+            throw new TicketException("Kein Name angegeben!");
         }
         if (!ticketIsReserved(seat)) {
-            throw new TicketException("Ticket is not reserved!");
+            throw new TicketException("Ticket ist nicht reserviert!");
         }
         if (!tickets[seat].getName().equals(name)) {
-            throw new TicketException("Ticket not reserved under this name!");
+            throw new TicketException("Ticket ist nicht auf diesen Namen reserviert!");
         }
         setStateOfTicket(seat, TicketState.SOLD);
 
@@ -69,17 +64,26 @@ public class Kartenverkauf {
 
     public synchronized void cancelTicket(int seat) throws TicketException {
         if (ticketNotExists(seat)) {
-            throw new TicketException("Ticket does not exist!");
+            throw new TicketException("Ticket existiert nicht!");
         }
         if (ticketIsFree(seat)) {
-            throw new TicketException("Ticket is already available!");
+            throw new TicketException("Ticket ist bereits verfügbar!");
         }
         setStateOfTicket(seat, TicketState.AVAILABLE);
 
     }
 
-    public synchronized void cancelTicketReservations() {
+    //protected wegen Test
+    protected synchronized void cancelAllTicketReservations() {
+        Arrays.stream(tickets).forEach(this::cancelTicketReservation);
         acceptReservations = false;
+    }
+
+    private synchronized void cancelTicketReservation(Ticket ticket) {
+        if (ticket.getState().equals(TicketState.RESERVED)) {
+            ticket.setName(null);
+            ticket.setState(TicketState.AVAILABLE);
+        }
     }
 
     private boolean ticketIsFree(int seat) {
@@ -90,38 +94,30 @@ public class Kartenverkauf {
         return tickets[seat].getState().equals(TicketState.RESERVED);
     }
 
-
     private boolean ticketNotExists(int seat) {
         return (seat < 0 || seat > 99);
     }
 
-    private void setStateOfTicket(int seat, TicketState state) {
+    private synchronized void setStateOfTicket(int seat, TicketState state) {
         Ticket ticket = tickets[seat];
         ticket.setState(state);
         tickets[seat] = ticket;
     }
 
-    private void setTicketReserved(int seat, String name) {
+    private synchronized void setTicketReserved(int seat, String name) {
         Ticket ticket = tickets[seat];
         ticket.setState(TicketState.RESERVED);
         ticket.setName(name);
         tickets[seat] = ticket;
     }
 
-    protected void cancelAllTicketReservations() {
-        Arrays.stream(tickets).forEach(this::cancelTicketReservation);
+    public boolean isAcceptingReservations() {
+        return acceptReservations;
     }
 
-    private void cancelTicketReservation(Ticket ticket) {
-        if (ticket.getState().equals(TicketState.RESERVED)) {
-            ticket.setName(null);
-            ticket.setState(TicketState.AVAILABLE);
-        }
-    }
-
-    public ArrayList<Integer> getAllAvailableTickets(){
+    public ArrayList<Integer> getAllAvailableTickets() {
         ArrayList<Integer> availableTickets = new ArrayList<>();
-        for (int i=0; i<100; i++) {
+        for (int i = 0; i < 100; i++) {
             Ticket ticket = tickets[i];
             if (ticket.getState().equals(TicketState.AVAILABLE)) {
                 availableTickets.add(i);
@@ -130,9 +126,9 @@ public class Kartenverkauf {
         return availableTickets;
     }
 
-    public ArrayList<Integer> getAllSoldTickets(){
+    public ArrayList<Integer> getAllSoldTickets() {
         ArrayList<Integer> soldTickets = new ArrayList<>();
-        for (int i=0; i<100; i++) {
+        for (int i = 0; i < 100; i++) {
             Ticket ticket = tickets[i];
             if (ticket.getState().equals(TicketState.SOLD)) {
                 soldTickets.add(i);
@@ -141,9 +137,9 @@ public class Kartenverkauf {
         return soldTickets;
     }
 
-    public ArrayList<Integer> getAllReservedTickets(){
+    public ArrayList<Integer> getAllReservedTickets() {
         ArrayList<Integer> reservedTickets = new ArrayList<>();
-        for (int i=0; i<100; i++) {
+        for (int i = 0; i < 100; i++) {
             Ticket ticket = tickets[i];
             if (ticket.getState().equals(TicketState.RESERVED)) {
                 reservedTickets.add(i);

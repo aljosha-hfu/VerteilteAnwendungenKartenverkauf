@@ -7,27 +7,30 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.logging.Logger;
 
 @WebServlet(name = "TicketManager", urlPatterns = "/ticketmanager")
 public class TicketManager extends HttpServlet {
 
-    final Logger logger = Logger.getLogger("TicketManager");
-    Kartenverkauf kartenverkauf = new Kartenverkauf();
+    Kartenverkauf kartenverkauf;
 
+    @Override
+    public void init() {
+        kartenverkauf = (Kartenverkauf) getServletContext().getAttribute("Kartenverkauf");
+    }
 
     @Override
     public void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String formName = request.getParameter("formName");
         String seatAsString = request.getParameter("seat");
         String name = request.getParameter("name");
-        System.out.println("FORMNAME                  ---- " + formName);
-        if(!isValidNumber(seatAsString)){
-            //TODO open error page
-            System.out.println("NOT A VALID NUMBER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-            return;
+        int seat = 0;
+        if (!formName.equals("cancelAllReservations")) {
+            if (!isValidNumber(seatAsString)) {
+                forwardToErrorPage(request, response, "Kein gültiger Platz!");
+                return;
+            }
+            seat = Integer.parseInt(seatAsString) - 1;
         }
-        int seat = Integer.parseInt(seatAsString)-1;
         try {
             switch (formName) {
                 case "sellTicket":
@@ -49,18 +52,15 @@ public class TicketManager extends HttpServlet {
                     forwardToErrorPage(request, response, "Unknown error");
             }
             response.sendRedirect(request.getContextPath() + "/success.html");
-        } catch (TicketException e){
+        } catch (TicketException e) {
             forwardToErrorPage(request, response, e.getMessage());
         }
-
-
 
     }
 
 
-
     private boolean isValidNumber(String stringToCheck) {
-        if(stringToCheck.length() >8){
+        if (stringToCheck.length() > 8) {
             return false;
         } else {
             return stringToCheck.matches("-?\\d+");

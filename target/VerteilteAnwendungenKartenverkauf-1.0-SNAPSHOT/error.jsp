@@ -1,19 +1,23 @@
 <%--
-  Created by IntelliJ IDEA.
-  User: Aljosha
+  Created by Aljosha Vieth using IntelliJ IDEA Ultimate.
   Date: 04.12.2020
   Time: 13:46
-  To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     final String errorMessage = (String) request.getAttribute ("errorMessage");
 %>
-<html>
+<!DOCTYPE html>
+<html lang="de">
 <head>
-    <title>Title</title>
+    <meta charset="UTF-8">
+    <meta name="author" content="Aljosha Vieth">
+    <title>Aljoshas Ticketverkauf</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<p><%= errorMessage %></p>
+<h1>Fehler</h1>
+<h3><%= errorMessage %></h3>
+<h2><a href="index.jsp">Zurück zur Hauptseite</a></h2>
 </body>
 </html>

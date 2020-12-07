@@ -27,7 +27,7 @@ class KartenverkaufTest {
             kartenverkauf.tickets[i] = ticket;
         }
         logger.info("Printing all TicketStates:");
-        Arrays.stream(kartenverkauf.tickets).forEach(t -> System.out.println(t.getState()));
+        Arrays.stream(kartenverkauf.tickets).forEach(t -> logger.info(t.getState().toString()));
     }
 
 
@@ -36,7 +36,7 @@ class KartenverkaufTest {
         logger.info("Cancelling all ticket reservations");
         kartenverkauf.cancelAllTicketReservations();
         logger.info("Printing all TicketStates:");
-        Arrays.stream(kartenverkauf.tickets).forEach(t -> System.out.println(t.getState()));
+        Arrays.stream(kartenverkauf.tickets).forEach(t -> logger.info(t.getState().toString()));
         assumeTrue(Arrays.stream(kartenverkauf.tickets).allMatch(ticket -> ticket.getState() == TicketState.AVAILABLE));
     }
 }
