@@ -1,18 +1,13 @@
 package de.aljoshavieth.kartenverkauf;
 
-import java.sql.Connection;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Kartenverkauf {
-    //TODO Dtanebank hier rein
-
     protected Ticket[] tickets = new Ticket[100];
     protected boolean acceptReservations = true;
-    private Connection connection;
 
-    public Kartenverkauf(Connection connection) {
+    public Kartenverkauf() {
         for (int i = 0; i < 100; i++) {
             Ticket ticket = new Ticket();
             ticket.setState(TicketState.AVAILABLE);

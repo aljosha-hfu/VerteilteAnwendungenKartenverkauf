@@ -17,7 +17,6 @@ public class ContextListener implements ServletContextListener {
     private Connection connection;
 
     public void contextInitialized(ServletContextEvent sce) {
-        logger.info("Starting application...");
         //Create db connection
         try {
             Context initialContext = new InitialContext();
@@ -26,7 +25,9 @@ public class ContextListener implements ServletContextListener {
             connection = dataSource.getConnection();
             logger.info("Datasource available");
 
+            String createTabeleQuery = "CREATE TABLE IF NOT EXISTS `tickets` (`id` TINYINT NOT NULL, `state` VARCHAR(9) NOT NULL, `name` VARCHAR(100));";
             Statement statement = connection.createStatement();
+            statement.executeUpdate(createTabeleQuery);
             statement.executeQuery("select * from tickets");
             logger.info("Successfully tested datasource");
 
@@ -37,7 +38,7 @@ public class ContextListener implements ServletContextListener {
         }
 
 
-        Kartenverkauf kartenverkauf = new Kartenverkauf(connection);
+        Kartenverkauf kartenverkauf = new Kartenverkauf();
         sce.getServletContext().setAttribute("Kartenverkauf", kartenverkauf);
     }
 

@@ -10,7 +10,6 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 class KartenverkaufTest {
 
-    //TODO mockito
     Kartenverkauf kartenverkauf = new Kartenverkauf();
     final Logger logger = Logger.getLogger("KartenverkaufTest");
 
