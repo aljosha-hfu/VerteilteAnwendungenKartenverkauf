@@ -6,6 +6,7 @@
 <%@ page import="java.util.StringJoiner" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="de.aljoshavieth.kartenverkauf.Kartenverkauf" %>
+<%@ page import="de.aljoshavieth.kartenverkauf.TicketException" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="de">
@@ -33,11 +34,16 @@
         }
 
         private String getReservationStatusWord(Kartenverkauf kartenverkauf){
-            if(kartenverkauf.isAcceptingReservations()){
+            try {
+                if(kartenverkauf.isAcceptingReservations()){
                 return "";
             } else {
                 return "nicht ";
             }
+            } catch (TicketException e){
+                return " auf Grund eines Fehlers in der Datenbank nicht ";
+            }
+
         };
         %>
         <%
